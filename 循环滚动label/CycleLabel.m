@@ -7,6 +7,7 @@
 //
 
 #import "CycleLabel.h"
+#import "CADisplayLink+Block.h"
 
 @interface CycleLabel()
 
@@ -67,6 +68,10 @@
         self.label.frame = CGRectMake(0, 0, rect.size.width + 15, self.frame.size.height);
         [self createSecondLabel];
         self.timer = [CADisplayLink displayLinkWithTarget:self selector:@selector(cycleLabel)];
+        __weak typeof(self) weakSelf = self;
+        self.timer = [CADisplayLink displayLinkWithBlock:^{
+            [weakSelf cycleLabel];
+        }];
         [self.timer setPaused:NO];
         [self.timer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
     }
